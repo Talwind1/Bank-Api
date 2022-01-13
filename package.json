@@ -1,0 +1,28 @@
+{
+  "name": "bank-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Talwind1/Bank-Api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Talwind1/Bank-Api/issues"
+  },
+  "homepage": "https://github.com/Talwind1/Bank-Api#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "nodeman": "^1.1.2",
+    "nodemon": "^2.0.15",
+    "request": "^2.88.2",
+    "require": "^2.4.20"
+  }
+}
