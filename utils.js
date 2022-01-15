@@ -73,12 +73,13 @@ const depositUp = (id, deposit) => {
 };
 
 const credit = (id, money) => {
-  const users = loadUsers();
   try {
+    console.log("hi credit");
+    const users = loadUsers();
     if (!isValidId(id)) {
       throw Error("id is not valid.");
     }
-    const foundUser = users.find((user) => user.id === id);
+    const foundUser = users.find((user) => user.id == id);
     if (credit < 0) {
       throw Error("Credit cannot be negative.");
     }
@@ -88,7 +89,7 @@ const credit = (id, money) => {
     if (!foundUser.isActive) {
       throw Error("User is not active");
     } else {
-      foundUser[credit] = money;
+      foundUser.credit = money;
       saveUsers(users);
       return foundUser;
     }
@@ -100,7 +101,7 @@ const credit = (id, money) => {
 const withdraw = (id, money) => {
   try {
     const users = loadUsers();
-    const foundUser = users.find((user) => user.id === id);
+    const foundUser = users.find((user) => user.id == id);
     if (!isValidId(id)) {
       throw Error("id user is not valid.");
     } else if (!foundUser) {

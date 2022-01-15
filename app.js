@@ -57,7 +57,6 @@ app.put("/users/withdraw/:id", (req, res) => {
 });
 
 app.put("/users/credit/:id", (req, res) => {
-  // check deposit
   const money = req.body.money;
   const id = req.params.id;
   try {
