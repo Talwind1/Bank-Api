@@ -1,6 +1,7 @@
 const { is } = require("express/lib/request");
 const res = require("express/lib/response");
 const fs = require("fs");
+const { load } = require("nodemon/lib/config");
 
 const loadUsers = () => {
   try {
@@ -24,9 +25,9 @@ const addUser = (id) => {
     if (users.find((user) => user.id === id)) {
       throw Error("This user is already exist, no duplicates.");
     }
-    users.push({ id, cash: 0, credit: 0 });
+    users.push({ id, cash: 0, credit: 0, isActive: true });
     saveUsers(users);
-    return { id, cash: 0, credit: 0 };
+    return { id, cash: 0, credit: 0, isActive: true };
   } catch (e) {
     return e.message;
   }
@@ -58,6 +59,9 @@ const depositUp = (id, deposit) => {
     const foundUser = users.find((user) => user.id == id);
     if (!foundUser) {
       throw Error("User not found");
+    }
+    if (!foundUser.isActive) {
+      throw Error("User is not active");
     } else {
       foundUser.cash = Number(foundUser.cash) + Number(deposit);
       saveUsers(users);
@@ -80,6 +84,9 @@ const credit = (id, money) => {
     }
     if (!foundUser) {
       throw Error("User not found");
+    }
+    if (!foundUser.isActive) {
+      throw Error("User is not active");
     } else {
       foundUser[credit] = money;
       saveUsers(users);
@@ -99,8 +106,14 @@ const withdraw = (id, money) => {
     } else if (!foundUser) {
       throw Error("User not found");
     }
+    if (!foundUser.isActive) {
+      throw Error("User is not active");
+    }
     if (foundUser.cash + foundUser.credit < money) {
       throw Error("There's no enough money");
+    }
+    if (!isValidNumber(money)) {
+      throw Error("money amount is not valid.");
     }
     foundUser.cash = foundUser.cash - money;
     saveUsers(users);
@@ -116,6 +129,9 @@ const transfer = (money, reciver, id) => {
     const foundUser = users.find((user) => user.id == id);
     if (!foundUser) {
       throw Error("User not found");
+    }
+    if (!foundUser.isActive) {
+      throw Error("User is not active");
     }
     const foundReciver = users.find((user) => user.id == reciver);
     if (!foundReciver) {
@@ -141,4 +157,24 @@ const transfer = (money, reciver, id) => {
     return e.message;
   }
 };
-module.exports = { loadUsers, addUser, depositUp, credit, withdraw, transfer };
+
+const filter = (amount, type) => {
+  const users = loadUsers();
+  return users.filter((user) => user[type] >= amount);
+};
+
+const filterActive = (amount) => {
+  const users = loadUsers();
+  return users.filter((user) => user.isActive && user.cash >= amount);
+};
+
+module.exports = {
+  loadUsers,
+  addUser,
+  depositUp,
+  credit,
+  withdraw,
+  transfer,
+  filter,
+  filterActive,
+};

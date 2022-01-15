@@ -1,1 +1,6 @@
-[{"id":"1","cash":-1302,"credit":0},{"id":"2","cash":15896,"credit":100}]
+[
+  { "id": "1", "cash": 302, "credit": 0 },
+  { "id": "2", "cash": 15896, "credit": 100 },
+  { "id": 100, "cash": 100, "credit": 0, "isActive": true },
+  { "id": 101, "cash": 0, "credit": 0, "isActive": true }
+]

@@ -8,6 +8,8 @@ const {
   credit,
   withdraw,
   transfer,
+  filter,
+  filterActive,
 } = require("./utils");
 
 const PORT = 3000;
@@ -72,6 +74,33 @@ app.put("/users/transfer/:id", (req, res) => {
   const id = req.params.id;
   try {
     res.status(200).send(transfer(money, reciver, id));
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
+app.get("/users/filter/cash", (req, res) => {
+  try {
+    const cashAmount = req.body.amount;
+    res.status(200).send(filter(cashAmount, "cash"));
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
+app.get("/users/filter/credit", (req, res) => {
+  try {
+    const creditAmount = req.body.amount;
+    res.status(200).send(filter(creditAmount, "credit"));
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
+app.get("/users/filter/active/:cash", (req, res) => {
+  try {
+    const cashAmount = req.params.cash;
+    res.status(200).send(filterActive(cashAmount));
   } catch (e) {
     res.status(400).send(e.message);
   }
