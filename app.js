@@ -4,11 +4,16 @@ app.use(express.json());
 const {
   loadUsers,
   addUser,
-  depositeUp,
+  depositUp,
   credit,
   withdraw,
   transfer,
 } = require("./utils");
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log("listening on port " + PORT);
+});
 
 app.get("/users", (req, res) => {
   try {
@@ -20,48 +25,54 @@ app.get("/users", (req, res) => {
 
 app.post("/users", (req, res) => {
   try {
-    //if passport not valid
-    //if() throw;
-    //const pass = req.body.passportID;
-
-    const { passportID } = req.body;
-
-    //  const newUser = ;
-    res.status(201).send(addUser(passportID));
+    const { id } = req.body;
+    res.status(201).send(addUser(id));
   } catch (e) {
-    throw { error: "e.message" };
+    req.status(400).send(e.message);
   }
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log("listening on port " + PORT);
-});
-
-app.put("/users/deposite/:passportID", (req, res) => {
+app.put("/users/deposit/:id", (req, res) => {
   // check deposit
-  const deposite = req.body.deposite;
-  const id = req.params.passportID;
+  const deposit = req.body.deposit;
+  const id = req.params.id;
   try {
-    res.status(200).send(depositeUp(id, deposite));
-  } catch (e) {}
+    res.status(200).send(depositUp(id, deposit));
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
 });
 
-app.put("/users/credit/:passportID", (req, res) => {
+app.put("/users/withdraw/:id", (req, res) => {
   // check deposit
   const money = req.body.money;
-  const id = req.params.passportID;
+  const id = req.params.id;
   try {
-    res.status(200).send(credit(id, money));
-  } catch (e) {}
+    res.status(200).send(withdraw(id, money));
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
 });
 
-app.put("/users/transfer/:passportID", (req, res) => {
+app.put("/users/credit/:id", (req, res) => {
+  // check deposit
+  const money = req.body.money;
+  const id = req.params.id;
+  try {
+    res.status(200).send(credit(id, money));
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
+app.put("/users/transfer/:id", (req, res) => {
   // check deposit
   const money = req.body.money;
   const reciver = req.body.reciver;
-  const passportID = req.params.passportID;
+  const id = req.params.id;
   try {
-    res.status(200).send(transfer(money, reciver, passportID));
-  } catch (e) {}
+    res.status(200).send(transfer(money, reciver, id));
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
 });
